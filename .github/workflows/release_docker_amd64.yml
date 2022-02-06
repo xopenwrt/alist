@@ -1,15 +1,19 @@
-name: build_docker
+name: release_docker
 
 on:
   repository_dispatch:
   workflow_dispatch:
 #  push:
-#    branches: [ v2 ]
+#    branches:
+#      - 'v2'
+#    tags:
+#      - 'v*'
 #  pull_request:
-#    branches: [ v2 ]
+#    branches:
+#      - 'v2'
 
 jobs:
-  build_docker:
+  docker_release:
     name: Docker
     runs-on: ubuntu-latest
     steps:
@@ -26,8 +30,8 @@ jobs:
           node-version: '16'
       - name: Build web
         run: |
-          bash build.sh web
-          mv dist/* public
+          git clone -b dist https://github.com/kokeri/alist-web.git
+          mv alist-web/* public
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       - name: Set up Docker Buildx
@@ -35,7 +39,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: xhofe
+          username: xinb
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
         id: docker_build
@@ -45,4 +49,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/386,linux/arm/v6,linux/s390x
+          platforms: linux/amd64

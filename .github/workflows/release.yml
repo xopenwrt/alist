@@ -1,9 +1,16 @@
 name: release
 
 on:
-  push:
-    tags:
-      - '*'
+  repository_dispatch:
+  workflow_dispatch:
+#  push:
+#    branches:
+#      - 'v2'
+#    tags:
+#      - 'v*'
+#  pull_request:
+#    branches:
+#      - 'v2'
 
 jobs:
   release:
@@ -35,9 +42,9 @@ jobs:
 
       - name: Build
         run: |
+          git clone -b dist https://github.com/kokeri/alist-web.git
+          mv alist-web/* alist/public
           mv alist/build.sh .
-          bash build.sh cdn
-          mv dist/* alist/public
           bash build.sh release
 
       - name: Release
