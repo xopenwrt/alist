@@ -1,8 +1,10 @@
 name: Issue Question
 
 on:
-  issues:
-    types: [labeled]
+  repository_dispatch:
+  workflow_dispatch:
+  # issues:
+  #   types: [labeled]
 
 jobs:
   create-comment:

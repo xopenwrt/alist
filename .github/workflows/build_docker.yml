@@ -1,8 +1,10 @@
 name: build_docker
 
 on:
-  push:
-    branches: [ v2 ]
+  repository_dispatch:
+  workflow_dispatch:
+  # push:
+  #   branches: [ v2 ]
 
 jobs:
   build_docker:
